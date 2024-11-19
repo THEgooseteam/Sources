@@ -1,1 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database - HW Games</title>
+  <script>
+    // Function to handle unban action (this should be tied to your backend)
+    function unbanDevice(deviceId) {
+      // You will need to integrate backend logic here to unban the device
+      console.log("Unbanning device:", deviceId);
+
+      // For now, just remove the row as a simulation
+      const row = document.getElementById(`device-${deviceId}`);
+      row.remove();
+    }
+  </script>
+</head>
+<body>
+  <!-- Same Top Bar as the index page -->
+  <header class="top-bar">
+    <div class="buttons">
+      <a href="/index.html" class="button">Home</a>
+      <a href="/games.html" class="button">Games</a>
+      <a href="/suggestions.html" class="button">Suggestions</a>
+      <a href="#contact" class="button">More</a>
+    </div>
+    <!-- Invisible link box (same as index page) -->
+    <a href="database.html" class="top-bar-box"></a>
+  </header>
+
+  <!-- Main Content (Empty Content, Changelog Sections) -->
+  <main>
+    <!-- Device Ban Management Table -->
+    <section class="device-ban-management">
+      <h1>Cookie Banned Devices</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Device ID</th>
+            <th>Device Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Add dynamically generated rows here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
 
