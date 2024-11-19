@@ -1,0 +1,72 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suggestions - HW Games</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="buttons">
+      <a href="/index.html" class="button">Home</a>
+      <a href="/games.html" class="button">Games</a>
+      <a href="#projects" class="button">Suggestions</a>
+      <a href="#contact" class="button">Contact</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Suggestions Section -->
+    <section class="suggestions">
+      <h1>Submit Your Suggestion</h1>
+      <p>If you have a suggestion for a game or feature you'd like us to add, please fill out the form below!</p>
+
+      <form id="suggestionForm">
+        <div class="form-group">
+          <label for="name">Your Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="suggestion">Your Suggestion:</label>
+          <textarea id="suggestion" name="suggestion" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="button">Submit Suggestion</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('suggestionForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const suggestion = document.getElementById('suggestion').value;
+
+      const webhookUrl = 'https://discord.com/api/webhooks/1307426898426462229/z0rRcdXD9wnjDkcPqfcK4x8u0IcQvaMbp7zGC1HHjR51jGvQll-NnXBCgxwEZ8IsBKW6'; // Replace with your Discord Webhook URL
+
+      const embedData = {
+        embeds: [{
+          title: "New Suggestion Submitted",
+          fields: [
+            { name: "Name", value: name },
+            { name: "Suggestion", value: suggestion }
+          ],
+          color: 3066993 // Optional color code (green)
+        }]
+      };
+
+      fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(embedData)
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    });
+  </script>
+</body>
+</html>
