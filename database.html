@@ -79,17 +79,39 @@
     }
   </style>
   <script>
-    // Function to add a banned device and save it in localStorage
-    function banDevice() {
-      const deviceId = document.getElementById("device-id").value;
-      const deviceName = document.getElementById("device-name").value;
-      if (deviceId && deviceName) {
-        let bannedDevices = JSON.parse(localStorage.getItem("bannedDevices")) || [];
-        bannedDevices.push({ id: deviceId, name: deviceName });
-        localStorage.setItem("bannedDevices", JSON.stringify(bannedDevices));
+    // Function to read cookies
+    function getCookie(name) {
+      let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? match[2] : null;
+    }
 
-        // Update the table with the new banned device
-        displayBannedDevices();
+    // Function to display the banned devices
+    function displayBannedDevices() {
+      const bannedDevices = JSON.parse(localStorage.getItem("bannedDevices")) || [];
+      const tableBody = document.getElementById("device-table-body");
+      tableBody.innerHTML = ""; // Clear existing rows
+
+      // Get the device cookie (device ID)
+      const deviceId = getCookie('deviceId');
+
+      // Filter banned devices based on the cookie value
+      const filteredDevices = bannedDevices.filter(device => device.id === deviceId);
+
+      // If there's no device cookie, don't display anything
+      if (deviceId && filteredDevices.length > 0) {
+        filteredDevices.forEach(device => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${device.id}</td>
+            <td>${device.name}</td>
+            <td><button onclick="unbanDevice('${device.id}')">Unban</button></td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } else {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td colspan="3">No banned devices found for this device ID.</td>`;
+        tableBody.appendChild(row);
       }
     }
 
@@ -101,23 +123,6 @@
 
       // Update the table after unbanning
       displayBannedDevices();
-    }
-
-    // Function to display all banned devices
-    function displayBannedDevices() {
-      const bannedDevices = JSON.parse(localStorage.getItem("bannedDevices")) || [];
-      const tableBody = document.getElementById("device-table-body");
-      tableBody.innerHTML = ""; // Clear existing rows
-
-      bannedDevices.forEach(device => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${device.id}</td>
-          <td>${device.name}</td>
-          <td><button onclick="unbanDevice('${device.id}')">Unban</button></td>
-        `;
-        tableBody.appendChild(row);
-      });
     }
 
     // Run displayBannedDevices when page loads to initialize the table
@@ -145,17 +150,6 @@
     <section class="device-ban-management">
       <h1>Manage Banned Devices</h1>
 
-      <!-- Form to ban a new device -->
-      <div>
-        <label for="device-name">Device Name:</label>
-        <input type="text" id="device-name" placeholder="Enter device name" />
-      </div>
-      <div>
-        <label for="device-id">Device ID:</label>
-        <input type="text" id="device-id" placeholder="Enter device ID" />
-      </div>
-      <button onclick="banDevice()">Ban Device</button>
-
       <!-- Table of banned devices -->
       <table>
         <thead>
@@ -173,4 +167,3 @@
   </main>
 </body>
 </html>
-
