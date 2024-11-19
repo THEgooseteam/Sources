@@ -54,6 +54,7 @@
     function removeBanFromYourself() {
       deleteCookie('deviceId'); // Delete the deviceId cookie
       alert("You have successfully removed the ban from yourself. Refresh the page.");
+      window.location.reload(); // Refresh the page to reflect changes
     }
 
     // Run displayBannedDevices when page loads to initialize the list
