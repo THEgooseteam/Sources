@@ -4,17 +4,130 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Database - HW Games</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #0f0;
+      padding: 20px;
+    }
+
+    /* Top Bar Styling */
+    .top-bar {
+      background-color: #111;
+      color: #0f0;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .top-bar .buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .top-bar .button {
+      color: #0f0;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      border: 2px solid #0f0;
+      border-radius: 5px;
+    }
+
+    .top-bar .button:hover {
+      background-color: #0f0;
+      color: #000;
+    }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #111;
+      color: #0f0;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #0f0;
+    }
+
+    th {
+      background-color: #222;
+    }
+
+    td {
+      background-color: #333;
+    }
+
+    button {
+      padding: 6px 12px;
+      background-color: #0f0;
+      border: none;
+      color: #000;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0a0;
+    }
+  </style>
   <script>
-    // Function to handle unban action (this should be tied to your backend)
+    // Function to add a banned device and save it in localStorage
+    function banDevice() {
+      const deviceId = document.getElementById("device-id").value;
+      const deviceName = document.getElementById("device-name").value;
+      if (deviceId && deviceName) {
+        let bannedDevices = JSON.parse(localStorage.getItem("bannedDevices")) || [];
+        bannedDevices.push({ id: deviceId, name: deviceName });
+        localStorage.setItem("bannedDevices", JSON.stringify(bannedDevices));
+
+        // Update the table with the new banned device
+        displayBannedDevices();
+      }
+    }
+
+    // Function to unban a device and update the table
     function unbanDevice(deviceId) {
-      // For now, just remove the row as a simulation
-      const row = document.getElementById(`device-${deviceId}`);
-      row.remove();
+      let bannedDevices = JSON.parse(localStorage.getItem("bannedDevices")) || [];
+      bannedDevices = bannedDevices.filter(device => device.id !== deviceId);
+      localStorage.setItem("bannedDevices", JSON.stringify(bannedDevices));
+
+      // Update the table after unbanning
+      displayBannedDevices();
+    }
+
+    // Function to display all banned devices
+    function displayBannedDevices() {
+      const bannedDevices = JSON.parse(localStorage.getItem("bannedDevices")) || [];
+      const tableBody = document.getElementById("device-table-body");
+      tableBody.innerHTML = ""; // Clear existing rows
+
+      bannedDevices.forEach(device => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${device.id}</td>
+          <td>${device.name}</td>
+          <td><button onclick="unbanDevice('${device.id}')">Unban</button></td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Run displayBannedDevices when page loads to initialize the table
+    window.onload = function() {
+      displayBannedDevices();
     }
   </script>
 </head>
 <body>
-  <!-- Same Top Bar as the index page -->
+  <!-- Top Bar with Navigation Links -->
   <header class="top-bar">
     <div class="buttons">
       <a href="/index.html" class="button">Home</a>
@@ -22,13 +135,29 @@
       <a href="/suggestions.html" class="button">Suggestions</a>
       <a href="#contact" class="button">More</a>
     </div>
+    <div>
+      <a href="/database.html" class="button">Database</a>
+    </div>
   </header>
 
-  <!-- Main Content (Device Ban Management Table) -->
+  <!-- Main Content -->
   <main>
     <section class="device-ban-management">
-      <h1>Cookie Banned Devices</h1>
-      <table border="1" style="width: 100%; border-collapse: collapse;">
+      <h1>Manage Banned Devices</h1>
+
+      <!-- Form to ban a new device -->
+      <div>
+        <label for="device-name">Device Name:</label>
+        <input type="text" id="device-name" placeholder="Enter device name" />
+      </div>
+      <div>
+        <label for="device-id">Device ID:</label>
+        <input type="text" id="device-id" placeholder="Enter device ID" />
+      </div>
+      <button onclick="banDevice()">Ban Device</button>
+
+      <!-- Table of banned devices -->
+      <table>
         <thead>
           <tr>
             <th>Device ID</th>
@@ -36,26 +165,12 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Placeholder rows for banned devices -->
-          <tr id="device-1">
-            <td>1</td>
-            <td>Device A</td>
-            <td><button onclick="unbanDevice(1)">Unban</button></td>
-          </tr>
-          <tr id="device-2">
-            <td>2</td>
-            <td>Device B</td>
-            <td><button onclick="unbanDevice(2)">Unban</button></td>
-          </tr>
-          <tr id="device-3">
-            <td>3</td>
-            <td>Device C</td>
-            <td><button onclick="unbanDevice(3)">Unban</button></td>
-          </tr>
+        <tbody id="device-table-body">
+          <!-- Dynamically filled banned devices -->
         </tbody>
       </table>
     </section>
   </main>
 </body>
 </html>
+
