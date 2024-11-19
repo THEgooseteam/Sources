@@ -18,9 +18,10 @@
       });
 
       if (blocked) {
-        // Redirect the user or show a block message
-        alert('You are blocked from accessing this page.');
-        window.location.href = 'index.html';  // Redirect to home page or another page
+        // Show the "You're banned bozo" message on a white screen
+        document.body.innerHTML = "<h1 style='text-align:center; color: red; font-size: 3em;'>You're banned, bozo</h1>";
+        document.body.style.backgroundColor = "white";
+        document.body.style.color = "red";
       }
     }
 
