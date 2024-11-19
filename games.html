@@ -1,10 +1,32 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Games - HW Games</title>
   <link rel="stylesheet" href="styles.css">
+  <script>
+    // Function to check for the 'blocked' cookie
+    function checkBlockedCookie() {
+      const cookies = document.cookie.split(';');
+      let blocked = false;
+
+      cookies.forEach(cookie => {
+        if (cookie.trim().startsWith('blocked=true')) {
+          blocked = true;
+        }
+      });
+
+      if (blocked) {
+        // Redirect the user or show a block message
+        alert('You are blocked from accessing this page.');
+        window.location.href = 'index.html';  // Redirect to home page or another page
+      }
+    }
+
+    // Run the check when the page loads
+    window.onload = checkBlockedCookie;
+  </script>
 </head>
 <body>
   <header class="top-bar">
@@ -59,9 +81,9 @@
           <img src="https://via.placeholder.com/150" alt="Game 8">
           <p>Game 8</p>
         </a>
-        </a>
       </div>
     </section>
   </main>
 </body>
 </html>
+
