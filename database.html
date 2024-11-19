@@ -109,7 +109,7 @@
       document.cookie = name + '=; Max-Age=-99999999; path=/';
     }
 
-    // Function to display the banned devices
+    // Function to display all banned devices (with active cookies)
     function displayBannedDevices() {
       const bannedDevices = JSON.parse(localStorage.getItem("bannedDevices")) || [];
       const tableBody = document.getElementById("device-table-body");
@@ -118,23 +118,29 @@
       // Get the device cookie (device ID)
       const deviceId = getCookie('deviceId');
 
-      // Filter banned devices based on the cookie value
-      const filteredDevices = bannedDevices.filter(device => device.id === deviceId);
-
-      // If there's no device cookie, don't display anything
-      if (deviceId && filteredDevices.length > 0) {
-        filteredDevices.forEach(device => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${device.id}</td>
-            <td>${device.name}</td>
-            <td><button onclick="unbanDevice('${device.id}')">Unban</button></td>
-          `;
-          tableBody.appendChild(row);
-        });
-      } else {
+      // Loop through banned devices and display only those matching the cookie
+      bannedDevices.forEach(device => {
         const row = document.createElement("tr");
-        row.innerHTML = `<td colspan="3">No banned devices found for this device ID.</td>`;
+        row.innerHTML = `
+          <td>${device.id}</td>
+          <td>${device.name}</td>
+          <td>
+            <button onclick="unbanDevice('${device.id}')">Unban</button>
+          </td>
+        `;
+        
+        // If the device matches the current deviceId cookie, highlight it
+        if (device.id === deviceId) {
+          row.style.backgroundColor = '#444'; // Highlight banned device with this deviceId
+        }
+        
+        tableBody.appendChild(row);
+      });
+
+      // If there are no banned devices with the cookie, display a message
+      if (bannedDevices.length === 0) {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td colspan="3">No banned devices found.</td>`;
         tableBody.appendChild(row);
       }
     }
