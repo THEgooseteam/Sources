@@ -26,6 +26,18 @@ body {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
 }
 
+/* Invisible box in the top-left corner */
+.top-bar-box {
+  position: absolute;
+  left: 10px; /* Align it to the left */
+  top: 50%; /* Vertically center */
+  transform: translateY(-50%); /* Fine-tune centering */
+  width: 20px;
+  height: 20px;
+  background-color: #111; /* Match top bar color */
+  text-decoration: none; /* Remove link styling */
+}
+
 /* Buttons in Top Bar */
 .buttons {
   display: flex;
@@ -46,8 +58,6 @@ body {
   background-color: #0f0;
   color: #000;
 }
-
-
 
 /* Content Section */
 .content {
