@@ -14,7 +14,7 @@
 
     // Function to delete cookies
     function deleteCookie(name) {
-      document.cookie = name + '=; Max-Age=-99999999; path=/';
+      document.cookie = name + '=; Max-Age=-99999999; path=/';  // Ensure the cookie is deleted globally
     }
 
     // Function to display the banned devices list based on cookies
@@ -50,9 +50,9 @@
       }
     }
 
-    // Function to remove the device's ban by deleting the cookie
+    // Function to remove the ban from the user's device by deleting the "blocked" cookie
     function removeBanFromYourself() {
-      deleteCookie('deviceId'); // Delete the deviceId cookie
+      deleteCookie('blocked');  // Delete the "blocked" cookie
       alert("You have successfully removed the ban from yourself. Refresh the page.");
       window.location.reload(); // Refresh the page to reflect changes
     }
