@@ -4,99 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Database - HW Games</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #000;
-      color: #0f0;
-      padding: 20px;
-    }
-
-    /* Top Bar Styling */
-    .top-bar {
-      background-color: #111;
-      color: #0f0;
-      padding: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
-    }
-
-    .top-bar .buttons {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .top-bar .button {
-      color: #0f0;
-      text-decoration: none;
-      font-size: 1rem;
-      padding: 0.5rem 1rem;
-      border: 2px solid #0f0;
-      border-radius: 5px;
-    }
-
-    .top-bar .button:hover {
-      background-color: #0f0;
-      color: #000;
-    }
-
-    /* Table Styling */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: #111;
-      color: #0f0;
-      margin-top: 20px;
-    }
-
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border: 1px solid #0f0;
-    }
-
-    th {
-      background-color: #222;
-    }
-
-    td {
-      background-color: #333;
-    }
-
-    button {
-      padding: 6px 12px;
-      background-color: #0f0;
-      border: none;
-      color: #000;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0a0;
-    }
-
-    /* Remove Ban Button Styling */
-    .remove-ban-button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #f00;
-      border: none;
-      color: #fff;
-      font-size: 1.2rem;
-      border-radius: 5px;
-      cursor: pointer;
-      display: block;
-      width: 100%;
-      text-align: center;
-    }
-
-    .remove-ban-button:hover {
-      background-color: #c00;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css"> <!-- Link to your external CSS -->
   <script>
     // Function to read cookies
     function getCookie(name) {
@@ -109,50 +17,37 @@
       document.cookie = name + '=; Max-Age=-99999999; path=/';
     }
 
-    // Function to display all banned devices (with active cookies)
+    // Function to display the banned devices list based on cookies
     function displayBannedDevices() {
       const bannedDevices = JSON.parse(localStorage.getItem("bannedDevices")) || [];
-      const tableBody = document.getElementById("device-table-body");
-      tableBody.innerHTML = ""; // Clear existing rows
+      const listContainer = document.getElementById("banned-devices-list");
+
+      // Clear the existing list
+      listContainer.innerHTML = "";
 
       // Get the device cookie (device ID)
       const deviceId = getCookie('deviceId');
 
-      // Loop through banned devices and display only those matching the cookie
-      bannedDevices.forEach(device => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${device.id}</td>
-          <td>${device.name}</td>
-          <td>
-            <button onclick="unbanDevice('${device.id}')">Unban</button>
-          </td>
-        `;
-        
-        // If the device matches the current deviceId cookie, highlight it
-        if (device.id === deviceId) {
-          row.style.backgroundColor = '#444'; // Highlight banned device with this deviceId
+      // If the cookie exists, show only the devices with the matching deviceId
+      if (deviceId) {
+        let count = 1; // For "Device 1", "Device 2", etc.
+
+        // Loop through the banned devices and display each one
+        bannedDevices.forEach(device => {
+          if (device.id === deviceId) {
+            const listItem = document.createElement("li");
+            listItem.textContent = `Device ${count++}: ${device.id}`;
+            listContainer.appendChild(listItem);
+          }
+        });
+
+        // If no matching devices, show a message
+        if (listContainer.innerHTML === "") {
+          listContainer.innerHTML = "<p>No banned devices found with your device cookie.</p>";
         }
-        
-        tableBody.appendChild(row);
-      });
-
-      // If there are no banned devices with the cookie, display a message
-      if (bannedDevices.length === 0) {
-        const row = document.createElement("tr");
-        row.innerHTML = `<td colspan="3">No banned devices found.</td>`;
-        tableBody.appendChild(row);
+      } else {
+        listContainer.innerHTML = "<p>No device cookie found.</p>";
       }
-    }
-
-    // Function to unban a device and update the table
-    function unbanDevice(deviceId) {
-      let bannedDevices = JSON.parse(localStorage.getItem("bannedDevices")) || [];
-      bannedDevices = bannedDevices.filter(device => device.id !== deviceId);
-      localStorage.setItem("bannedDevices", JSON.stringify(bannedDevices));
-
-      // Update the table after unbanning
-      displayBannedDevices();
     }
 
     // Function to remove the device's ban by deleting the cookie
@@ -161,7 +56,7 @@
       alert("You have successfully removed the ban from yourself. Refresh the page.");
     }
 
-    // Run displayBannedDevices when page loads to initialize the table
+    // Run displayBannedDevices when page loads to initialize the list
     window.onload = function() {
       displayBannedDevices();
     }
@@ -183,22 +78,11 @@
 
   <!-- Main Content -->
   <main>
-    <section class="device-ban-management">
-      <h1>Manage Banned Devices</h1>
-
-      <!-- Table of banned devices -->
-      <table>
-        <thead>
-          <tr>
-            <th>Device ID</th>
-            <th>Device Name</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="device-table-body">
-          <!-- Dynamically filled banned devices -->
-        </tbody>
-      </table>
+    <section class="banned-devices-list">
+      <h1>Banned Devices List</h1>
+      <ul id="banned-devices-list">
+        <!-- Devices will be listed here dynamically -->
+      </ul>
 
       <!-- Remove Ban from Yourself Button -->
       <button class="remove-ban-button" onclick="removeBanFromYourself()">Remove Ban from Yourself</button>
