@@ -77,12 +77,36 @@
     button:hover {
       background-color: #0a0;
     }
+
+    /* Remove Ban Button Styling */
+    .remove-ban-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #f00;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      border-radius: 5px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+
+    .remove-ban-button:hover {
+      background-color: #c00;
+    }
   </style>
   <script>
     // Function to read cookies
     function getCookie(name) {
       let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
       return match ? match[2] : null;
+    }
+
+    // Function to delete cookies
+    function deleteCookie(name) {
+      document.cookie = name + '=; Max-Age=-99999999; path=/';
     }
 
     // Function to display the banned devices
@@ -125,6 +149,12 @@
       displayBannedDevices();
     }
 
+    // Function to remove the device's ban by deleting the cookie
+    function removeBanFromYourself() {
+      deleteCookie('deviceId'); // Delete the deviceId cookie
+      alert("You have successfully removed the ban from yourself. Refresh the page.");
+    }
+
     // Run displayBannedDevices when page loads to initialize the table
     window.onload = function() {
       displayBannedDevices();
@@ -163,6 +193,9 @@
           <!-- Dynamically filled banned devices -->
         </tbody>
       </table>
+
+      <!-- Remove Ban from Yourself Button -->
+      <button class="remove-ban-button" onclick="removeBanFromYourself()">Remove Ban from Yourself</button>
     </section>
   </main>
 </body>
