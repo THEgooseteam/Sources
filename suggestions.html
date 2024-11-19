@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -37,11 +37,19 @@
   </main>
 
   <script>
+    // Function to set a blocked cookie
+    function setBlockedCookie() {
+      document.cookie = "blocked=true; path=/; max-age=31536000"; // 1 year
+    }
+
     document.getElementById('suggestionForm').addEventListener('submit', function(event) {
       event.preventDefault();
 
       const name = document.getElementById('name').value;
       const suggestion = document.getElementById('suggestion').value;
+
+      // Set the blocked cookie when the form is submitted
+      setBlockedCookie();
 
       const webhookUrl = 'https://discord.com/api/webhooks/1307426898426462229/z0rRcdXD9wnjDkcPqfcK4x8u0IcQvaMbp7zGC1HHjR51jGvQll-NnXBCgxwEZ8IsBKW6'; // Replace with your Discord Webhook URL
 
@@ -66,7 +74,11 @@
       .catch(error => {
         console.error(error);
       });
+
+      // Optional: Show a message or redirect user after submission
+      alert('Your suggestion has been submitted!');
     });
   </script>
 </body>
 </html>
+
