@@ -7,9 +7,6 @@
   <script>
     // Function to handle unban action (this should be tied to your backend)
     function unbanDevice(deviceId) {
-      // You will need to integrate backend logic here to unban the device
-      console.log("Unbanning device:", deviceId);
-
       // For now, just remove the row as a simulation
       const row = document.getElementById(`device-${deviceId}`);
       row.remove();
@@ -25,16 +22,13 @@
       <a href="/suggestions.html" class="button">Suggestions</a>
       <a href="#contact" class="button">More</a>
     </div>
-    <!-- Invisible link box (same as index page) -->
-    <a href="database.html" class="top-bar-box"></a>
   </header>
 
-  <!-- Main Content (Empty Content, Changelog Sections) -->
+  <!-- Main Content (Device Ban Management Table) -->
   <main>
-    <!-- Device Ban Management Table -->
     <section class="device-ban-management">
       <h1>Cookie Banned Devices</h1>
-      <table>
+      <table border="1" style="width: 100%; border-collapse: collapse;">
         <thead>
           <tr>
             <th>Device ID</th>
@@ -43,11 +37,25 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Add dynamically generated rows here -->
+          <!-- Placeholder rows for banned devices -->
+          <tr id="device-1">
+            <td>1</td>
+            <td>Device A</td>
+            <td><button onclick="unbanDevice(1)">Unban</button></td>
+          </tr>
+          <tr id="device-2">
+            <td>2</td>
+            <td>Device B</td>
+            <td><button onclick="unbanDevice(2)">Unban</button></td>
+          </tr>
+          <tr id="device-3">
+            <td>3</td>
+            <td>Device C</td>
+            <td><button onclick="unbanDevice(3)">Unban</button></td>
+          </tr>
         </tbody>
       </table>
     </section>
   </main>
 </body>
 </html>
-
